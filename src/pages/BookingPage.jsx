@@ -2,7 +2,18 @@ import DaySelector from '../components/DaySelector';
 import Movies from '../components/Movies';
 import SelectedMovie from '../components/SelectedMovie';
 
+import { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { loadMovies } from '../store/moviesSlice';
+
 const BookingPage = () => {
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(loadMovies());
+  }, [dispatch]);
+
   return (
     <div className="w-full min-h-screen bg-base-100">
       <section className="w-full text-primary-content py-6">
