@@ -7,7 +7,7 @@ function App() {
   return (
     <Router>
       <Header />
-      <main className="p-4">
+      <main className="">
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/booking/:movieId/:screeningId" element={<BookingPage />} />
