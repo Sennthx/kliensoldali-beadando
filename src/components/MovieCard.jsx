@@ -11,7 +11,7 @@ const MovieCard = ({ id, title, image, duration, genre }) => {
       onClick={() => dispatch(setSelectedMovie(id))}
       className={`
         card bg-base-100 shadow-md rounded-md overflow-hidden cursor-pointer transition 
-        hover:bg-base-200
+        hover:bg-base-100/60
         ${isSelected ? 'border-2 border-green-500' : 'border border-transparent'}
       `}
     >
