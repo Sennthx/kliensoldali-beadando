@@ -7,7 +7,6 @@ const AddToSummaryButton = () => {
 
   const ticketCounts = useSelector(state => state.ui.ticketCounts);
   const selectedSeats = useSelector(state => state.ui.selectedSeats);
-
   const totalTickets = ticketCounts.adult + ticketCounts.student + ticketCounts.senior;
 
   const handleAddToSummary = () => {
@@ -24,7 +23,6 @@ const AddToSummaryButton = () => {
 
     dispatch(openCartModal());
     toast.success('Added to reserve summary!');
-
   };
 
   return (
@@ -33,7 +31,7 @@ const AddToSummaryButton = () => {
         className="btn btn-primary w-full text-xl py-6"
         onClick={handleAddToSummary}
     >
-        Show Reserve Summary
+        Show Summary
     </button>
     </div>
 

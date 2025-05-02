@@ -74,10 +74,10 @@ const SummaryModal = ({ isOpen, onClose, onConfirm }) => {
       <div className="modal-box relative">
         <button
           onClick={handleClearBooking}
-          className="absolute right-4 top-4 flex items-center gap-2 btn btn-sm btn-ghost"
+          className="absolute right-6 top-6 flex items-center gap-2 btn btn-sm btn-ghost"
           aria-label="Clear Booking"
         >
-          <span>Clear reserve</span>
+          <span className='text-sm'>Clear</span>
           <X className="w-4 h-4" />
         </button>
 

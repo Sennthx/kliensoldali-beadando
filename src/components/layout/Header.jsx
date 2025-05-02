@@ -19,13 +19,14 @@ const Header = () => {
           </Link>
           
           <nav className="flex items-center gap-2"> 
-            <button 
-              onClick={() => dispatch(openCartModal())}
-              className="fixed bottom-10 right-10 z-50 bg-primary text-white hover:bg-primary/70 rounded-full p-4 shadow-lg transition-colors duration-300"
-              aria-label="Open Cart"
-            >
-              <ShoppingCart className="w-8 h-8" />
-            </button>
+          <button
+            onClick={() => dispatch(openCartModal())}
+            className="fixed top-6 right-6 lg:top-auto lg:bottom-10 z-50 bg-primary text-white hover:bg-primary/70 rounded-full p-4 shadow-lg transition-colors duration-300"
+            aria-label="Open Cart"
+          >
+            <ShoppingCart className="w-8 h-8" />
+          </button>
+
           </nav>
         </div>
       </header>

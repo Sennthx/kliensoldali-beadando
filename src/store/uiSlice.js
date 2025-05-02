@@ -17,6 +17,7 @@ const initialState = {
     },
     selectedSeats: [],
     isCartModalOpen: false,
+    loadedFromLocalStorage: false,
 };
 
 const uiSlice = createSlice({
@@ -74,7 +75,10 @@ reducers: {
     },
     resetSelectedSeats: (state) => {
         state.selectedSeats = [];
-    }
+    },
+    setLoadedFromLocalStorage: (state, action) => {
+        state.loadedFromLocalStorage = action.payload;
+    },
 },
 });
 
@@ -90,6 +94,7 @@ export const {
     removeSelectedSeat,
     openCartModal,
     closeCartModal,
-    resetSelectedSeats, } = uiSlice.actions;
+    resetSelectedSeats,
+    setLoadedFromLocalStorage, } = uiSlice.actions;
     
 export default uiSlice.reducer;

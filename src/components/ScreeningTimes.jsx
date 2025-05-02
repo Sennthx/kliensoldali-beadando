@@ -6,7 +6,7 @@ const ScreeningTimes = ({ screenings, selectedDay }) => {
   const selectedScreeningId = useSelector((state) => state.ui.selectedScreeningId);
 
   const handleScreeningClick = (screeningId) => {
-    dispatch(setSelectedScreeningId(screeningId));
+    dispatch(setSelectedScreeningId(screeningId));  // Set the screening ID
   };
 
   const isScreeningFullyBooked = (screening) => {
@@ -24,7 +24,7 @@ const ScreeningTimes = ({ screenings, selectedDay }) => {
           <div className="flex flex-wrap gap-2">
             {screenings.map((s) => {
               const fullyBooked = isScreeningFullyBooked(s);
-              const isSelected = s.id === selectedScreeningId;
+              const isSelected = s.id === selectedScreeningId; // Check if this screening is selected
 
               return (
                 <button

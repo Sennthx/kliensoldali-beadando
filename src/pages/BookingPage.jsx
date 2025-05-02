@@ -14,7 +14,7 @@ const BookingPage = () => {
     dispatch(loadMovies());
   }, [dispatch]);
 
-  return (
+  return (  
     <div className="w-full min-h-screen bg-base-100">
         <section className="w-full text-primary-content py-6">
           <div className="max-w-7xl mx-auto px-4">
