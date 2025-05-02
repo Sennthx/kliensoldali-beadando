@@ -1,5 +1,5 @@
-<Hallgató neve>  
-<Neptun kódja>
+Tóth Áron
+ZNXA1X
 
 **Kliensoldali webprogramozás - beadandó**
 
