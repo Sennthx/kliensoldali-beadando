@@ -1,44 +1,44 @@
-import { useSelector } from 'react-redux';
-import ScreeningTimes from './ScreeningTimes';
+import { useSelector } from "react-redux";
+import ScreeningTimes from "./ScreeningTimes";
 
 const MovieDetails = () => {
+    const selectedMovieId = useSelector((state) => state.ui.selectedMovieId);
+    const selectedDay = useSelector((state) => state.ui.selectedDay);
 
-  const selectedMovieId = useSelector((state) => state.ui.selectedMovieId);
-  const selectedDay = useSelector((state) => state.ui.selectedDay);
+    const movie = useSelector((state) =>
+        state.movies.list.find((m) => m.id === selectedMovieId)
+    );
 
-  const movie = useSelector((state) =>
-    state.movies.list.find((m) => m.id === selectedMovieId)
-  );
+    if (!movie) return null;
 
-  if (!movie) return null;
+    const screenings = movie.screenings.filter(
+        (s) => s.weekday === selectedDay
+    );
 
-  const screenings = movie.screenings.filter(
-    (s) => s.weekday === selectedDay
-  );
-
-  return (
-<div className="flex flex-col gap-6 items-start">
-  <div className="flex flex-col lg:flex-row gap-6 w-full lg:ml-3">
-    <div className="relative w-full lg:w-1/2 aspect-[10/14] transform lg:-rotate-6 flex justify-center items-center">
-      <img
-        src={`/src/assets/images/${movie.image}`}
-        alt={movie.title}
-        className="object-cover rounded-md shadow-lg 
+    return (
+        <div className="flex flex-col gap-6 items-start">
+            <div className="flex flex-col lg:flex-row gap-6 w-full lg:ml-3">
+                <div className="relative w-full lg:w-1/2 aspect-[10/14] transform lg:-rotate-6 flex justify-center items-center">
+                    <img
+                        src={`/src/assets/images/${movie.image}`}
+                        alt={movie.title}
+                        className="object-cover rounded-md shadow-lg 
           sm:w-[200px] sm:h-[280px] md:w-5/6 md:h-5/6 lg:w-full lg:h-full"
-      />
-    </div>
+                    />
+                </div>
 
-    <div className="flex-1 space-y-4">
-      <h2 className="text-2xl font-bold">{movie.title}</h2>
-      <p className="text-gray-500 text-sm">Release Year: {movie.release_year}</p>
-      <p className="text-base">{movie.description}</p>
-    </div>
-  </div>
+                <div className="flex-1 space-y-4">
+                    <h2 className="text-2xl font-bold">{movie.title}</h2>
+                    <p className="text-gray-500 text-sm">
+                        Release Year: {movie.release_year}
+                    </p>
+                    <p className="text-base">{movie.description}</p>
+                </div>
+            </div>
 
-  <ScreeningTimes screenings={screenings} selectedDay={selectedDay} />
-</div>
-
-  );
+            <ScreeningTimes screenings={screenings} selectedDay={selectedDay} />
+        </div>
+    );
 };
 
 export default MovieDetails;
