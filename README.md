@@ -18,8 +18,8 @@ A fegyelmi vétség legsúlyosabb következménye a hallgató elbocsátása az e
 
 ### Feladatok:
 
-- [ ] **Az alkalmazás legalább 4 komponensből áll.** (Enélkül a beadandót nem fogadjuk el.) (1pt)  
-      Tehát léteznek például a következő komponensek:
+- [x] **Az alkalmazás legalább 4 komponensből áll.** (Enélkül a beadandót nem fogadjuk el.) (1pt)  
+       Tehát léteznek például a következő komponensek:
 
     - Film kártya komponens
     - Jegytípus választó komponens
