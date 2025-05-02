@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import moviesData from "../assets/movies.json";
+import moviesData from "../data/movies.json";
 
 export const loadMovies = createAsyncThunk("movies/load", async () => {
     return moviesData;

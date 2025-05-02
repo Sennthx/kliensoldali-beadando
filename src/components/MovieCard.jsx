@@ -18,7 +18,7 @@ const MovieCard = ({ id, title, image, duration, genre }) => {
             <figure className="p-4">
                 <div className="relative w-full aspect-[10/14]">
                     <img
-                        src={`/src/assets/images/${image}`}
+                        src={`/images/${image}`}
                         alt={title}
                         className="object-cover w-full h-full rounded-md"
                     />

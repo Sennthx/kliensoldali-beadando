@@ -20,7 +20,7 @@ const MovieDetails = () => {
             <div className="flex flex-col lg:flex-row gap-6 w-full lg:ml-3">
                 <div className="relative w-full lg:w-1/2 aspect-[10/14] transform lg:-rotate-6 flex justify-center items-center">
                     <img
-                        src={`/src/assets/images/${movie.image}`}
+                        src={`/images/${movie.image}`}
                         alt={movie.title}
                         className="object-cover rounded-md shadow-lg 
           sm:w-[200px] sm:h-[280px] md:w-5/6 md:h-5/6 lg:w-full lg:h-full"
