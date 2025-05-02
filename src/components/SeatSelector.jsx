@@ -1,60 +1,118 @@
-import { useState } from 'react';
+    import { useEffect } from 'react';
+    import { useSelector, useDispatch } from 'react-redux';
+    import { addSelectedSeat, removeSelectedSeat, resetSelectedSeats } from '../store/uiSlice'; // You might need to add `resetSelectedSeats` in your Redux slice
+    import { toast } from 'react-toastify';
 
-const SeatSelector = ({ seatMatrix, ticketCount }) => {
-  const [selectedSeats, setSelectedSeats] = useState([]);
+    const SeatSelector = () => {
+    const dispatch = useDispatch();
+    const selectedSeats = useSelector((state) => state.ui.selectedSeats);
+    const selectedMovieId = useSelector(state => state.ui.selectedMovieId);
+    const selectedScreeningId = useSelector(state => state.ui.selectedScreeningId);
+    const movies = useSelector(state => state.movies.list);
+    const selectedMovie = movies.find(m => m.id === selectedMovieId);
 
-  const handleSeatSelect = (seat) => {
-    const key = `${seat.row}-${seat.seat}`;
-    const isSelected = selectedSeats.some(s => s.row === seat.row && s.seat === seat.seat);
+    const selectedScreening = selectedMovie?.screenings.find(s => s.id === selectedScreeningId);    const ticketCounts = useSelector((state) => state.ui.ticketCounts);
 
-    if (isSelected) {
-      setSelectedSeats(selectedSeats.filter(s => !(s.row === seat.row && s.seat === seat.seat)));
-    } else if (selectedSeats.length < ticketCount) {
-      setSelectedSeats([...selectedSeats, seat]);
-    }
-  };
+    const totalTickets = ticketCounts.adult + ticketCounts.student + ticketCounts.senior;
 
-  const rowIndexToLetter = (index) => {
-    const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-    return alphabet[index] || String.fromCharCode(65 + index); // Handle row beyond 'Z'
-  };
+    // If no screening is selected, return null
+    if (!selectedScreening) return null;
 
-  return (
-    <div className="space-y-4">
-      <h3 className="text-lg font-semibold">Seat Selection</h3>
-      <div className="space-y-1">
-        {seatMatrix.map((row, rowIndex) => (
-          <div key={rowIndex} className="flex gap-1 justify-center">
-            {row.map((seat, seatIndex) => {
-              const isSelected = selectedSeats.some(s => s.row === seat.row && s.seat === seat.seat);
-              return (
-                <button
-                  key={seatIndex}
-                  onClick={() => handleSeatSelect(seat)}
-                  className={`btn btn-xs ${!seat.available ? 'bg-gray-400 cursor-not-allowed' : isSelected ? 'bg-green-500 text-white' : 'bg-gray-200'} 
-                            rounded-none
-                            text-accent text-lg font-semibold
-                            `}
-                  disabled={!seat.available}
-                  style={{ width: '48px', height: '48px' }}
-                >
-                  {rowIndexToLetter(seat.row)}{seat.seat}
-                </button>
-              );
-            })}
-          </div>
-        ))}
-      </div>
-      <div className="mt-4">
-        <h4>Selected Seats:</h4>
-        <ul>
-          {selectedSeats.map((s, i) => (
-            <li key={i}>{`Row ${rowIndexToLetter(s.row)}, Seat ${s.seat}`}</li>
-          ))}
-        </ul>
-      </div>
-    </div>
-  );
-};
+    // Generate seat matrix based on the selected screening and its bookings
+    const generateSeatMatrix = () => {
+        const { rows, seatsPerRow } = selectedScreening.room;
+        const booked = new Set(selectedScreening.bookings.map((b) => `${b.row}-${b.seat}`));
 
-export default SeatSelector;
+        return Array.from({ length: rows }, (_, rowIndex) => (
+        Array.from({ length: seatsPerRow }, (_, seatIndex) => {
+            const row = rowIndex + 1;
+            const seat = seatIndex + 1;
+            return {
+                row,
+                seat,
+                available: !booked.has(`${row}-${seat}`),
+            };
+        })
+        ));
+    };
+
+    const seatMatrix = generateSeatMatrix();
+
+    // Handle selecting or deselecting a seat
+    const handleSeatSelect = (seat) => {
+        if (totalTickets === 0) {
+            toast.error("Please select the number of tickets first.");
+            return;
+        }
+
+        const isSelected = selectedSeats.some((s) => s.row === seat.row && s.seat === seat.seat);
+
+        if (isSelected) {
+            dispatch(removeSelectedSeat(seat));
+        } else if (selectedSeats.length < totalTickets) {
+            dispatch(addSelectedSeat(seat));
+        }
+    };
+
+    const rowIndexToLetter = (index) => {
+        const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        return alphabet[index] || String.fromCharCode(65 + index);
+    };
+
+    // Deselect seats when ticket count is reduced
+    useEffect(() => {
+        if (selectedSeats.length > totalTickets) {
+            const excessSeats = selectedSeats.slice(totalTickets);
+            excessSeats.forEach((seat) => dispatch(removeSelectedSeat(seat)));
+            toast.info("Extra seats deselected due to reduced ticket count.");
+        }
+    }, [ticketCounts, selectedSeats, totalTickets, dispatch]);
+    
+    // Reset selected seats when the screening changes
+    useEffect(() => {
+        dispatch(resetSelectedSeats());
+    }, [selectedScreening, dispatch]);
+
+    return (
+        <>
+        <div className="flex justify-center mb-8">
+            <div className="space-y-4">
+            <h3 className="text-4xl font-bold mb-8 text-center">Seat Selection</h3>
+            <div className="space-y-1">
+                {seatMatrix.map((row, rowIndex) => (
+                <div key={rowIndex} className="flex gap-1 justify-center">
+                    {row.map((seat, seatIndex) => {
+                    const isSelected = selectedSeats.some(
+                        (s) => s.row === seat.row && s.seat === seat.seat
+                    );
+
+                    return (
+                        <button
+                        key={seatIndex}
+                        onClick={() => handleSeatSelect(seat)}
+                        className={`btn btn-xs ${
+                            !seat.available
+                            ? "bg-gray-400 cursor-not-allowed"
+                            : isSelected
+                            ? "bg-green-500 text-white"
+                            : "bg-gray-200"
+                        } rounded-none text-accent text-lg font-semibold`}
+                        disabled={!seat.available}
+                        style={{ width: "42px", height: "42px" }}
+                        >
+                        {rowIndexToLetter(seat.row - 1)}
+                        {seat.seat}
+                        </button>
+                    );
+                    })}
+                </div>
+                ))}
+            </div>
+            </div>
+        </div>
+        <hr className="mb-4" />
+        </>
+    );
+    };
+
+    export default SeatSelector;

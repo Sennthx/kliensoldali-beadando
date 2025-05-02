@@ -1,30 +1,42 @@
 import { useDispatch, useSelector } from 'react-redux';
-import { setSelectedScreening } from '../store/uiSlice';
+import { setSelectedScreeningId } from '../store/uiSlice';
 
 const ScreeningTimes = ({ screenings, selectedDay }) => {
   const dispatch = useDispatch();
-  const selectedScreening = useSelector((state) => state.ui.selectedScreening);
+  const selectedScreeningId = useSelector((state) => state.ui.selectedScreeningId);
 
   const handleScreeningClick = (screeningId) => {
-    dispatch(setSelectedScreening(screeningId));
-    console.log("Screening clicked:", screeningId);
+    dispatch(setSelectedScreeningId(screeningId));
+  };
+
+  const isScreeningFullyBooked = (screening) => {
+    const { rows, seatsPerRow } = screening.room;
+    const totalSeats = rows * seatsPerRow;
+    const bookedSeats = screening.bookings.length;
+    return bookedSeats >= totalSeats;
   };
 
   return (
     <div className="w-full mt-6">
       {screenings.length > 0 ? (
         <div className="space-y-2">
-          <h3 className="text-lg font-semibold">Available Times on {selectedDay}:</h3>
+          <h3 className="text-xl font-semibold">Available Screening times on {selectedDay}:</h3>
           <div className="flex flex-wrap gap-2">
-            {screenings.map((s) => (
-              <button
-                key={s.id}
-                className={`btn btn-sm btn-outline btn-accent ${selectedScreening === s.id ? 'bg-green-500 text-white' : ''}`}
-                onClick={() => handleScreeningClick(s.id)}
-              >
-                {s.start_time}
-              </button>
-            ))}
+            {screenings.map((s) => {
+              const fullyBooked = isScreeningFullyBooked(s);
+              const isSelected = s.id === selectedScreeningId;
+
+              return (
+                <button
+                  key={s.id}
+                  className={`btn btn-sm btn-outline btn-accent text-md ${isSelected ? 'bg-green-500 text-white' : ''}`}
+                  onClick={() => handleScreeningClick(s.id)}
+                  disabled={fullyBooked}
+                >
+                  {s.start_time} {fullyBooked ? '(Full)' : ''}
+                </button>
+              );
+            })}
           </div>
         </div>
       ) : (

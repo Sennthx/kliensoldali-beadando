@@ -8,7 +8,7 @@ const MovieList = () => {
 
   const selectedDay = useSelector((state) => state.ui.selectedDay);
 
-  const filteredMovies = movies.filter((movie) =>
+  let filteredMovies = movies.filter((movie) =>
     movie.screenings?.some((screening) => screening.weekday === selectedDay)
   );
 

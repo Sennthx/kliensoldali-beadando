@@ -1,7 +1,9 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Header from './components/layout/Header';
-import HomePage from './pages/HomePage';
 import BookingPage from './pages/BookingPage';
+
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
   return (
@@ -9,10 +11,10 @@ function App() {
       <Header />
       <main className="">
         <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/booking/:movieId/:screeningId" element={<BookingPage />} />
+          <Route path="/" element={<BookingPage />} />
         </Routes>
       </main>
+      <ToastContainer position="top-right" autoClose={3000} />
     </Router>
   );
 }

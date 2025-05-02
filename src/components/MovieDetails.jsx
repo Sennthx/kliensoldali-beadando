@@ -18,8 +18,8 @@ const MovieDetails = () => {
 
   return (
     <div className="flex flex-col gap-6 items-start">
-      <div className="flex flex-col lg:flex-row gap-6 w-full">
-        <div className="relative w-full lg:w-1/2 aspect-[10/14] transform -rotate-6">
+      <div className="flex flex-col lg:flex-row gap-10 w-full">
+        <div className="relative w-full lg:w-1/2 aspect-[10/14] transform -rotate-6 ml-2">
           <img
             src={`/src/assets/images/${movie.image}`}
             alt={movie.title}

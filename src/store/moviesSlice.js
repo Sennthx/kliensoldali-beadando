@@ -11,7 +11,21 @@ const moviesSlice = createSlice({
     list: [],
     status: 'idle',
   },
-  reducers: {},
+  reducers: {
+    addBookingsToScreening: (state, action) => {
+        const { movieId, screeningId, newBookings } = action.payload;
+        console.log("asdasdsad")
+        const movie = state.list.find(movie => movie.id === movieId);
+        if (movie) {
+            const screening = movie.screenings.find(screening => screening.id === screeningId);
+            if (screening) {
+            // Add the new bookings to the screening's bookings array
+            screening.bookings.push(...newBookings);
+            console.log("Updated bookings:", screening.bookings);
+            }
+        }
+    },
+  },
   extraReducers: builder => {
     builder
       .addCase(loadMovies.pending, state => {
@@ -27,4 +41,5 @@ const moviesSlice = createSlice({
   },
 });
 
+export const { addBookingsToScreening } = moviesSlice.actions;
 export default moviesSlice.reducer;
