@@ -21,7 +21,6 @@ const moviesSlice = createSlice({
                     (screening) => screening.id === screeningId
                 );
                 if (screening) {
-                    // Add the new bookings to the screening's bookings array
                     screening.bookings.push(...newBookings);
                     console.log("Updated bookings:", screening.bookings);
                 }

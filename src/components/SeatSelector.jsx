@@ -118,7 +118,7 @@ const SeatSelector = () => {
                         }
                         rounded-none text-accent text-lg font-semibold
                         border-none
-                        w-[30px] h-[30px] sm:w-[40px] sm:h-[40px] lg:w-[42px] lg:h-[42px]
+                        w-[28px] h-[28px] sm:w-[40px] sm:h-[40px] lg:w-[32px] lg:h-[32px]
                       `}
                                             disabled={!seat.available}
                                         >
