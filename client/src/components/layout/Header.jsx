@@ -3,10 +3,24 @@ import { ShoppingCart } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
 import { closeCartModal, openCartModal } from "../../store/uiSlice";
 import SummaryModal from "../SummaryModal";
+import { useEffect, useState } from "react";
+
 
 const Header = () => {
     const dispatch = useDispatch();
     const isModalOpen = useSelector((state) => state.ui.isCartModalOpen);
+
+
+    const [showCartButton, setShowCartButton] = useState(false);
+
+    useEffect(() => {
+        const handleScroll = () => {
+            setShowCartButton(window.scrollY > 20);
+        };
+
+        window.addEventListener("scroll", handleScroll);
+        return () => window.removeEventListener("scroll", handleScroll);
+    }, []);
 
     return (
         <>
@@ -21,14 +35,18 @@ const Header = () => {
                         </span>
                     </Link>
 
-                    <nav className="flex items-center gap-2">
-                        <button
-                            onClick={() => dispatch(openCartModal())}
-                            className="fixed top-6 right-6 lg:top-auto lg:bottom-10 z-50 bg-primary text-white hover:bg-primary/70 rounded-full p-4 shadow-lg transition-colors duration-300"
-                            aria-label="Open Cart"
-                        >
-                            <ShoppingCart className="w-8 h-8" />
-                        </button>
+                    <nav className="flex items-center gap-4">
+                        <Link to="/login" className="btn btn-sm btn-outline btn-primary">Login</Link>
+                        <Link to="/register" className="btn btn-sm btn-outline btn-primary">Register</Link>
+                        {showCartButton && (
+                            <button
+                                onClick={() => dispatch(openCartModal())}
+                                className="fixed top-6 right-6 lg:top-auto lg:bottom-10 z-50 bg-primary text-white hover:bg-primary/70 rounded-full p-4 shadow-lg transition-colors duration-300"
+                                aria-label="Open Cart"
+                            >
+                                <ShoppingCart className="w-8 h-8" />
+                            </button>
+                        )}
                     </nav>
                 </div>
             </header>
