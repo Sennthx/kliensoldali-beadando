@@ -29,13 +29,13 @@ const DaySelector = () => {
                                 key={day}
                                 onClick={() => dispatch(setSelectedDay(day))}
                                 className={`
-                  btn
-                  ${isFirst ? "rounded-l-xl rounded-r-sm" : ""}
-                  ${isLast ? "rounded-r-xl rounded-l-sm" : ""}
-                  ${!isFirst && !isLast ? "rounded-sm" : ""}
-                  ${isSelected ? "bg-secondary text-secondary-content border-2 border-secondary" : "bg-primary text-primary-content hover:bg-primary/70"}
-                  text-xl mx-1 p-4 py-6
-                `}
+                                    btn
+                                    ${isFirst ? "rounded-l-xl rounded-r-sm" : ""}
+                                    ${isLast ? "rounded-r-xl rounded-l-sm" : ""}
+                                    ${!isFirst && !isLast ? "rounded-sm" : ""}
+                                    ${isSelected ? "bg-secondary text-secondary-content border-2 border-secondary" : "bg-primary text-primary-content hover:bg-primary/70"}
+                                    text-xl mx-1 p-4 py-6
+                                    `}
                             >
                                 {day}
                             </button>

@@ -1,26 +1,30 @@
 import { Link } from "react-router-dom";
-import { ShoppingCart } from "lucide-react";
+import { Menu, X, ShoppingCart } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
 import { closeCartModal, openCartModal } from "../../store/uiSlice";
+import { logout } from "../../store/authSlice";
 import SummaryModal from "../SummaryModal";
 import { useEffect, useState } from "react";
-
 
 const Header = () => {
     const dispatch = useDispatch();
     const isModalOpen = useSelector((state) => state.ui.isCartModalOpen);
-
+    const user = useSelector((state) => state.auth.user);
+    const isLoggedIn = !!user;
+    const role = user?.role;
 
     const [showCartButton, setShowCartButton] = useState(false);
+    const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
     useEffect(() => {
         const handleScroll = () => {
             setShowCartButton(window.scrollY > 20);
         };
-
         window.addEventListener("scroll", handleScroll);
         return () => window.removeEventListener("scroll", handleScroll);
     }, []);
+
+    // Close mobile menu on navigation or logout can be added if needed
 
     return (
         <>
@@ -35,21 +39,137 @@ const Header = () => {
                         </span>
                     </Link>
 
-                    <nav className="flex items-center gap-4">
-                        <Link to="/login" className="btn btn-sm btn-outline btn-primary">Login</Link>
-                        <Link to="/register" className="btn btn-sm btn-outline btn-primary">Register</Link>
-                        {showCartButton && (
-                            <button
-                                onClick={() => dispatch(openCartModal())}
-                                className="fixed top-6 right-6 lg:top-auto lg:bottom-10 z-50 bg-primary text-white hover:bg-primary/70 rounded-full p-4 shadow-lg transition-colors duration-300"
-                                aria-label="Open Cart"
-                            >
-                                <ShoppingCart className="w-8 h-8" />
-                            </button>
+                    {/* Hamburger icon - visible only on small screens */}
+                    <button
+                        className="lg:hidden btn btn-ghost"
+                        onClick={() => setMobileMenuOpen((open) => !open)}
+                        aria-label="Toggle Menu"
+                    >
+                        {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+                    </button>
+
+                    {/* Desktop nav */}
+                    <nav className="hidden lg:flex items-center gap-4">
+                        <Link to="/" className="btn btn-sm btn-ghost btn-primary">Movies</Link>
+
+                        {!isLoggedIn && (
+                            <>
+                            <Link to="/login" className="btn btn-sm btn-ghost btn-primary">Login</Link>
+                            <Link to="/register" className="btn btn-sm btn-ghost btn-primary">Register</Link>
+                            </>
                         )}
-                    </nav>
+
+                        {isLoggedIn && (
+                            <>
+                            <Link to="/my-bookings" className="btn btn-sm btn-ghost btn-primary">My Bookings</Link>
+                            {role === "admin" && (
+                                <>
+                                <Link to="/add-movie" className="btn btn-sm btn-ghost btn-primary">Add Movie</Link>
+                                <Link to="/add-screening" className="btn btn-sm btn-ghost btn-primary">Add Screening</Link>
+                                </>
+                            )}
+                            <button onClick={() => dispatch(logout())} className="btn btn-sm btn-error text-white hover:bg-error/80">
+                                Logout
+                            </button>
+                            </>
+                        )}
+                        </nav>
                 </div>
             </header>
+
+            {/* Mobile menu overlay */}
+            {mobileMenuOpen && (
+                <div className="lg:hidden fixed top-0 left-0 right-0 bg-base-200 border-t border-secondary shadow-lg z-50 p-6 pt-4">
+                    <div className="flex justify-end">
+                    <button
+                        onClick={() => setMobileMenuOpen(false)}
+                        className="text-error hover:text-error-content text-left"
+                        aria-label="Close Menu"
+                    >
+                        <X className="w-6 h-6" />
+                    </button>
+                    </div>
+
+                    <nav className="flex flex-col gap-3 mt-4">
+                    <Link
+                        to="/"
+                        className="btn btn-block btn-ghost underline hover:bg-base-300"
+                        onClick={() => setMobileMenuOpen(false)}
+                    >
+                        Movies
+                    </Link>
+
+                    {!isLoggedIn && (
+                        <>
+                        <Link
+                            to="/login"
+                            className="btn btn-block btn-outline btn-primary underline hover:bg-primary/70"
+                            onClick={() => setMobileMenuOpen(false)}
+                        >
+                            Login
+                        </Link>
+                        <Link
+                            to="/register"
+                            className="btn btn-block btn-outline btn-primary underline hover:bg-primary/70"
+                            onClick={() => setMobileMenuOpen(false)}
+                        >
+                            Register
+                        </Link>
+                        </>
+                    )}
+
+                    {isLoggedIn && (
+                        <>
+                        <Link
+                            to="/my-bookings"
+                            className="btn btn-block btn-ghost underline hover:bg-base-300"
+                            onClick={() => setMobileMenuOpen(false)}
+                        >
+                            My Bookings
+                        </Link>
+                        {role === "admin" && (
+                            <>
+                            <Link
+                                to="/add-movie"
+                                className="btn btn-block btn-ghost underline hover:bg-base-300"
+                                onClick={() => setMobileMenuOpen(false)}
+                            >
+                                Add Movie
+                            </Link>
+                            <Link
+                                to="/add-screening"
+                                className="btn btn-block btn-ghost underline hover:bg-base-300"
+                                onClick={() => setMobileMenuOpen(false)}
+                            >
+                                Add Screening
+                            </Link>
+                            </>
+                        )}
+                        <button
+                            onClick={() => {
+                            dispatch(logout());
+                            setMobileMenuOpen(false);
+                            }}
+                            className="btn btn-block btn-error text-white hover:bg-error/60"
+                        >
+                            Logout
+                        </button>
+                        </>
+                    )}
+                    </nav>
+                </div>
+                )}
+
+
+            {showCartButton && (
+                <button
+    onClick={() => dispatch(openCartModal())}
+    className="fixed top-6 left-6 lg:left-auto lg:right-6 lg:top-auto lg:bottom-10 z-50 bg-primary text-white hover:bg-primary/70 rounded-full p-4 shadow-lg transition-colors duration-300"
+    aria-label="Open Cart"
+>
+    <ShoppingCart className="w-8 h-8" />
+</button>
+            )}
 
             <SummaryModal
                 isOpen={isModalOpen}
