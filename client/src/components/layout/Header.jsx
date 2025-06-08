@@ -91,12 +91,14 @@ const Header = () => {
 
                         {isLoggedIn && (
                             <>
-                                <Link
-                                    to="/my-bookings"
-                                    className="btn btn-sm btn-ghost btn-primary text-lg"
-                                >
-                                    My Bookings
-                                </Link>
+                                {role === "user" && (
+                                    <Link
+                                        to="/my-bookings"
+                                        className="btn btn-sm btn-ghost btn-primary text-lg"
+                                    >
+                                        My Bookings
+                                    </Link>
+                                )}
                                 {role === "admin" && (
                                     <>
                                         <Link

@@ -24,6 +24,11 @@ const MyBookingsPage = () => {
             return;
         }
 
+        if (user.role == "admin") {
+            navigate("/logn");
+            return;
+        }
+
         const fetchBookings = async () => {
             try {
                 const res = await fetch(`${API_BASE}/bookings`, {
