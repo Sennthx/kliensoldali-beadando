@@ -1,35 +1,61 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 const MyBookingsPage = () => {
     const user = useSelector((state) => state.auth.user);
+    const token = useSelector((state) => state.auth.token);
     const navigate = useNavigate();
 
-    useEffect(() => {
-        if (!user) {
-            navigate("/login");
-        }
-    }, [user, navigate]);
+    const [bookings, setBookings] = useState([]);
+    const [renderedBookings, setRenderedBookings] = useState([]);
+    const [renderIndex, setRenderIndex] = useState(0);
 
-    const bookings = [
-        {
-            id: 1,
-            movieTitle: "Inception",
-            date: "2025-06-15",
-            time: "19:00",
-            room: "Room 1",
-            seats: ["A1", "A2"],
-        },
-        {
-            id: 2,
-            movieTitle: "Interstellar",
-            date: "2025-06-18",
-            time: "21:30",
-            room: "Room 2",
-            seats: ["B3", "B4", "B5"],
-        },
-    ];
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+
+    const BATCH_SIZE = 5;
+
+    useEffect(() => {
+        if (!user || !token) {
+            navigate("/login");
+            return;
+        }
+
+        const fetchBookings = async () => {
+            try {
+                const res = await fetch("http://localhost:8000/api/bookings", {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                        Accept: "application/json",
+                    },
+                });
+
+                if (!res.ok) {
+                    throw new Error("Failed to fetch bookings");
+                }
+
+                const data = await res.json();
+                const allBookings = data.data || [];
+
+                setBookings(allBookings);
+                setRenderedBookings(allBookings.slice(0, BATCH_SIZE));
+                setRenderIndex(BATCH_SIZE);
+            } catch (err) {
+                setError(err.message);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchBookings();
+    }, [user, token, navigate]);
+
+    const handleLoadMore = () => {
+        const nextChunk = bookings.slice(renderIndex, renderIndex + BATCH_SIZE);
+        setRenderedBookings((prev) => [...prev, ...nextChunk]);
+        setRenderIndex((prev) => prev + BATCH_SIZE);
+    };
 
     return (
         <div className="flex items-start justify-center mt-8 bg-base-100 p-4">
@@ -38,28 +64,61 @@ const MyBookingsPage = () => {
                     My Bookings {user?.name ? `for ${user.name}` : ""}
                 </h2>
 
-                {bookings.length === 0 ? (
+                {loading ? (
+                    <p className="text-center text-sm text-gray-500">
+                        Loading...
+                    </p>
+                ) : error ? (
+                    <p className="text-center text-red-500 text-sm">{error}</p>
+                ) : renderedBookings.length === 0 ? (
                     <p className="text-center text-sm text-gray-500">
                         You have no bookings.
                     </p>
                 ) : (
                     <ul className="space-y-4">
-                        {bookings.map((booking) => (
-                            <li
-                                key={booking.id}
-                                className="p-4 bg-base-100 border border-base-300 rounded-lg"
+                        {renderedBookings.map((booking) => {
+                            const { screening, seats, id } = booking;
+                            const movieTitle = screening.movie.title;
+                            const room = screening.room.name || "Room";
+                            const date = new Date(
+                                screening.start_time
+                            ).toLocaleDateString();
+                            const time = new Date(
+                                screening.start_time
+                            ).toLocaleTimeString([], {
+                                hour: "2-digit",
+                                minute: "2-digit",
+                            });
+                            const formattedSeats = (seats || [])
+                                .map((s) => `R${s.row}S${s.seat}`)
+                                .join(", ");
+
+                            return (
+                                <li
+                                    key={id}
+                                    className="p-4 bg-base-100 border border-base-300 rounded-lg"
+                                >
+                                    <p className="font-semibold text-lg">
+                                        {movieTitle}
+                                    </p>
+                                    <p className="text-sm">Date: {date}</p>
+                                    <p className="text-sm">Time: {time}</p>
+                                    <p className="text-sm">Room: {room}</p>
+                                    <p className="text-sm">
+                                        Seats: {formattedSeats}
+                                    </p>
+                                </li>
+                            );
+                        })}
+
+                        {renderedBookings.length < bookings.length && (
+                            <button
+                                onClick={handleLoadMore}
+                                className="btn btn-primary w-full mt-4"
                             >
-                                <p className="font-semibold text-lg">
-                                    {booking.movieTitle}
-                                </p>
-                                <p className="text-sm">Date: {booking.date}</p>
-                                <p className="text-sm">Time: {booking.time}</p>
-                                <p className="text-sm">Room: {booking.room}</p>
-                                <p className="text-sm">
-                                    Seats: {booking.seats.join(", ")}
-                                </p>
-                            </li>
-                        ))}
+                                Load 5 more
+                            </button>
+                        )}
                     </ul>
                 )}
             </div>

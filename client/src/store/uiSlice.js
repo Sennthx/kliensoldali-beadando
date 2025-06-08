@@ -19,7 +19,7 @@ const initialState = {
     selectedMovieId: null,
     selectedScreeningId: null,
     ticketCounts: {
-        adult: 0,
+        normal: 0,
         student: 0,
         senior: 0,
     },
@@ -36,13 +36,15 @@ const uiSlice = createSlice({
             state.selectedDay = action.payload;
         },
         setSelectedMovie: (state, action) => {
+            console.log("Reducer setSelectedMovie", action.payload);
             state.selectedMovieId = action.payload;
         },
         clearSelectedMovie: (state) => {
             state.selectedMovieId = null;
+            console.log("clearSelectedMovie:");
             state.selectedScreeningId = null;
             state.ticketCounts = {
-                adult: 0,
+                normal: 0,
                 student: 0,
                 senior: 0,
             };
@@ -55,13 +57,13 @@ const uiSlice = createSlice({
             state.ticketCounts[type] = count;
         },
         clearTickets: (state) => {
-            state.ticketCounts = { adult: 0, student: 0, senior: 0 };
+            state.ticketCounts = { normal: 0, student: 0, senior: 0 };
         },
 
         resetBookingState: (state, action) => {
             state.selectedMovieId = action.payload;
             state.selectedScreeningId = null;
-            state.ticketCounts = { adult: 0, student: 0, senior: 0 };
+            state.ticketCounts = { normal: 0, student: 0, senior: 0 };
         },
         setSelectedSeats: (state, action) => {
             state.selectedSeats = action.payload;

@@ -22,15 +22,16 @@ const TicketSelector = () => {
     const bookedSeats = screeningData?.bookings?.length || 0;
     const availableSeats = totalSeats - bookedSeats;
 
-    const totalSelected = Object.values(ticketCounts).reduce(
-        (sum, val) => sum + val,
-        0
-    );
-
-    const user = useSelector((state) => state.auth.user);
-    const isLoggedIn = !!user;
+    const token = useSelector((state) => state.auth.token);
+    const isLoggedIn = !!token;
 
     const [localCounts, setLocalCounts] = useState(ticketCounts);
+
+    const totalSelected =
+        Object.values(localCounts).reduce(
+            (sum, val) => sum + parseInt(val || 0, 10),
+            0
+        ) - 1;
 
     useEffect(() => {
         setLocalCounts(ticketCounts);
@@ -44,11 +45,23 @@ const TicketSelector = () => {
 
         if (/^\d*$/.test(value)) {
             const parsed = parseInt(value || "0", 10);
-            const newTotal = totalSelected - ticketCounts[type] + parsed;
 
-            if (newTotal <= availableSeats) {
-                setLocalCounts((prev) => ({ ...prev, [type]: value }));
+            const simulatedCounts = {
+                ...localCounts, // Fix here
+                [type]: parsed,
+            };
+
+            const simulatedTotal =
+                Object.values(simulatedCounts).reduce(
+                    (sum, val) => sum + parseInt(val || 0, 10),
+                    0
+                ) - 1;
+
+            if (simulatedTotal <= availableSeats) {
+                setLocalCounts(simulatedCounts);
                 dispatch(setTicketCount({ type, count: parsed }));
+            } else {
+                toast.warning("Not enough available seats.");
             }
         }
     };
@@ -79,9 +92,9 @@ const TicketSelector = () => {
                     <div className="space-y-2 w-96">
                         {[
                             {
-                                label: "Adult Tickets",
+                                label: "Normal Tickets",
                                 price: 2500,
-                                key: "adult",
+                                key: "normal",
                             },
                             {
                                 label: "Student Tickets",

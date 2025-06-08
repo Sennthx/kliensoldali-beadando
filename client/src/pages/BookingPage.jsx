@@ -25,6 +25,10 @@ const BookingPage = () => {
         }
     };
 
+    useEffect(() => {
+        console.log("Selected Movie changed:", selectedMovieId);
+    }, [selectedMovieId]);
+
     return (
         <div className="w-full min-h-screen bg-base-100">
             <section className="w-full text-primary-content py-6">
@@ -40,15 +44,15 @@ const BookingPage = () => {
                     </div>
                     <div className="border-2 border-secondary sticky top-8 self-start bg-base-200 rounded-box p-0">
                         <div className="p-6 overflow-y-auto max-h-[calc(100vh-4rem)]">
-                            <SelectedMovie />
                             {user?.role === "admin" && selectedMovieId && (
                                 <button
-                                    className="btn btn-warning w-full"
+                                    className="btn btn-info w-full mb-4 text-lg"
                                     onClick={handleEditClick}
                                 >
                                     Edit Selected Movie
                                 </button>
                             )}
+                            <SelectedMovie />
                         </div>
                     </div>
                 </section>

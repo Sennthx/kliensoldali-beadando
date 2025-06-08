@@ -2,7 +2,6 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
     clearTickets,
-    clearSelectedMovie,
     setSelectedScreeningId,
     resetSelectedSeats,
 } from "../store/uiSlice";
@@ -32,15 +31,6 @@ const SelectedMovie = () => {
         dispatch(clearTickets());
         dispatch(resetSelectedSeats());
     }, [selectedMovieId, selectedDay, dispatch]);
-
-    useEffect(() => {
-        if (
-            selectedMovie &&
-            !selectedMovie.screenings.some((s) => s.weekday === selectedDay)
-        ) {
-            dispatch(clearSelectedMovie());
-        }
-    }, [selectedMovie, selectedDay, dispatch]);
 
     if (!selectedMovieId) {
         return (

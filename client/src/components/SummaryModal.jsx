@@ -8,8 +8,10 @@ import {
 import { toast } from "react-toastify";
 import { X } from "lucide-react";
 
+const API_BASE = import.meta.env.VITE_API_URL;
+
 const TICKET_PRICES = {
-    adult: 3000,
+    normal: 3000,
     student: 2000,
     senior: 2500,
 };
@@ -21,6 +23,8 @@ const rowIndexToLetter = (index) => {
 
 const SummaryModal = ({ isOpen, onClose, onConfirm }) => {
     const dispatch = useDispatch();
+
+    const token = useSelector((state) => state.auth.token);
 
     const movies = useSelector((state) => state.movies.list);
     const selectedMovieId = useSelector((state) => state.ui.selectedMovieId);
@@ -48,8 +52,42 @@ const SummaryModal = ({ isOpen, onClose, onConfirm }) => {
 
     if (!isOpen) return null;
 
-    const handleConfirm = () => {
-        if (hasValidBooking) {
+    const handleConfirm = async () => {
+        if (!hasValidBooking || !token) return;
+
+        try {
+            const payload = {
+                screening_id: selectedScreeningId,
+                seats: selectedSeats.map((seat) => ({
+                    row: seat.row,
+                    number: seat.seat, // matches controller's expected 'number' field
+                })),
+                ticket_types: Object.entries(ticketCounts)
+                    .filter(([, count]) => count > 0)
+                    .map(([type, count]) => ({
+                        type,
+                        quantity: count,
+                    })),
+            };
+
+            const response = await fetch(`${API_BASE}/bookings`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`,
+                },
+                body: JSON.stringify(payload),
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.message || "Booking failed");
+            }
+
+            const booking = await response.json();
+
+            console.log(booking, ": adasdsa");
+
             dispatch(
                 addBookingsToScreening({
                     movieId: selectedMovieId,
@@ -57,11 +95,14 @@ const SummaryModal = ({ isOpen, onClose, onConfirm }) => {
                     newBookings: selectedSeats,
                 })
             );
+
             dispatch(clearTickets());
             dispatch(resetSelectedSeats());
             dispatch(closeCartModal());
             toast.success("Order completed successfully!");
             if (onConfirm) onConfirm();
+        } catch (err) {
+            toast.error(err.message);
         }
     };
 

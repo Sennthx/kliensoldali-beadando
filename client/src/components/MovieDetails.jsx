@@ -5,6 +5,16 @@ const MovieDetails = () => {
     const selectedMovieId = useSelector((state) => state.ui.selectedMovieId);
     const selectedDay = useSelector((state) => state.ui.selectedDay);
 
+    const days = [
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday",
+        "Friday",
+        "Saturday",
+        "Sunday",
+    ];
+
     const movie = useSelector((state) =>
         state.movies.list.find((m) => m.id === selectedMovieId)
     );
@@ -12,7 +22,7 @@ const MovieDetails = () => {
     if (!movie) return null;
 
     const screenings = movie.screenings.filter(
-        (s) => s.weekday === selectedDay
+        (screening) => days[screening.week_day - 1] === selectedDay
     );
 
     return (
@@ -20,7 +30,7 @@ const MovieDetails = () => {
             <div className="flex flex-col lg:flex-row gap-6 w-full lg:ml-3">
                 <div className="relative w-full lg:w-1/2 aspect-[10/14] transform lg:-rotate-6 flex justify-center items-center">
                     <img
-                        src={`/images/${movie.image}`}
+                        src={movie.image_path}
                         alt={movie.title}
                         className="object-cover rounded-md shadow-lg 
                             sm:w-[200px] sm:h-[280px] md:w-5/6 md:h-5/6 lg:w-full lg:h-full"

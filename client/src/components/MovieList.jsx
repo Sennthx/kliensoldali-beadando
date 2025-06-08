@@ -3,22 +3,41 @@ import MovieCard from "./MovieCard";
 
 const MovieList = () => {
     const movies = useSelector((state) => state.movies.list);
-    const status = useSelector((state) => state.movies.status);
-
+    const moviesStatus = useSelector((state) => state.movies.status);
+    const screeningsStatus = useSelector(
+        (state) => state.movies.screeningsStatus
+    );
     const selectedDay = useSelector((state) => state.ui.selectedDay);
 
-    let filteredMovies = movies.filter((movie) =>
-        movie.screenings?.some((screening) => screening.weekday === selectedDay)
+    const days = [
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday",
+        "Friday",
+        "Saturday",
+        "Sunday",
+    ];
+
+    const filteredMovies = movies.filter((movie) =>
+        movie.screenings.some((screening) => {
+            const screeningDayText = days[screening.week_day - 1]; 
+            return screeningDayText === selectedDay;
+        })
     );
 
-    if (status === "loading") {
+    if (moviesStatus === "loading" || screeningsStatus === "loading") {
         return <div className="text-center">Loading movies...</div>;
     }
 
-    if (status === "error") {
+    if (moviesStatus === "error" || screeningsStatus === "error") {
         return (
             <div className="text-center text-error">Failed to load movies.</div>
         );
+    }
+
+    if (filteredMovies.length === 0) {
+        return <div className="text-center">No movies for {selectedDay}.</div>;
     }
 
     return (

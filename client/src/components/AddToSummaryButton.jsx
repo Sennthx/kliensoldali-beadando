@@ -8,11 +8,11 @@ const AddToSummaryButton = () => {
     const ticketCounts = useSelector((state) => state.ui.ticketCounts);
     const selectedSeats = useSelector((state) => state.ui.selectedSeats);
     const totalTickets =
-        ticketCounts.adult + ticketCounts.student + ticketCounts.senior;
+        ticketCounts.normal + ticketCounts.student + ticketCounts.senior;
 
-    const user = useSelector((state) => state.auth.user);
-    const isLoggedIn = !!user;
-
+    const token = useSelector((state) => state.auth.token);
+    const isLoggedIn = !!token;
+    
     const handleAddToSummary = () => {
         if (!isLoggedIn) {
             toast.info("Please log in to Show Summary");

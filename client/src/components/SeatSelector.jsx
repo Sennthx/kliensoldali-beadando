@@ -17,15 +17,15 @@ const SeatSelector = () => {
     const movies = useSelector((state) => state.movies.list);
     const selectedMovie = movies.find((m) => m.id === selectedMovieId);
 
-    const user = useSelector((state) => state.auth.user);
-    const isLoggedIn = !!user;
+    const token = useSelector((state) => state.auth.token);
+    const isLoggedIn = !!token;
 
     const selectedScreening = selectedMovie?.screenings.find(
         (s) => s.id === selectedScreeningId
     );
     const ticketCounts = useSelector((state) => state.ui.ticketCounts);
     const totalTickets =
-        ticketCounts.adult + ticketCounts.student + ticketCounts.senior;
+        ticketCounts.normal + ticketCounts.student + ticketCounts.senior;
 
     useEffect(() => {
         if (selectedSeats.length > totalTickets) {

@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from "react-redux";
 import { setSelectedMovie } from "../store/uiSlice";
 
-const MovieCard = ({ id, title, image, duration, genre }) => {
+const MovieCard = ({ id, title, image_path, duration, genre }) => {
     const dispatch = useDispatch();
     const selectedMovieId = useSelector((state) => state.ui.selectedMovieId);
     const isSelected = id === selectedMovieId;
@@ -18,7 +18,7 @@ const MovieCard = ({ id, title, image, duration, genre }) => {
             <figure className="p-4">
                 <div className="relative w-full aspect-[10/14]">
                     <img
-                        src={`/images/${image}`}
+                        src={image_path}
                         alt={title}
                         className="object-cover w-full h-full rounded-md"
                     />

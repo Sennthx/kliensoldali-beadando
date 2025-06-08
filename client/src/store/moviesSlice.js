@@ -1,25 +1,41 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-// import moviesData from "../data/movies.json";
 
 const API_BASE = import.meta.env.VITE_API_URL;
 
 export const loadMovies = createAsyncThunk("movies/load", async () => {
     const response = await fetch(`${API_BASE}/movies`);
     if (!response.ok) throw new Error("Failed to fetch movies");
-    return await response.json();
+    const data = await response.json();
+    return data.data;
 });
 
-export const loadMovie = createAsyncThunk("movies/loadOne", async (movieId) => {
-    const response = await fetch(`${API_BASE}/movies/${movieId}`);
-    if (!response.ok) throw new Error("Movie not found");
-    return await response.json();
-});
+export const loadMovie = createAsyncThunk(
+    "movies/loadOne",
+    async (movieId, { rejectWithValue }) => {
+        try {
+            const response = await fetch(`${API_BASE}/movies/${movieId}`);
+            if (response.status === 404) {
+                return rejectWithValue("not_found");
+            }
+            if (!response.ok) {
+                throw new Error("Failed to load movie");
+            }
+            const data = await response.json();
+            return data.data;
+        } catch (error) {
+            return rejectWithValue(error.message || "Unknown error");
+        }
+    }
+);
 
 const moviesSlice = createSlice({
     name: "movies",
     initialState: {
         list: [],
         status: "idle",
+        currentMovie: null,
+        currentMovieStatus: "idle",
+        currentMovieError: null,
     },
     reducers: {
         addBookingsToScreening: (state, action) => {
@@ -35,6 +51,11 @@ const moviesSlice = createSlice({
                 }
             }
         },
+        clearCurrentMovie: (state) => {
+            state.currentMovie = null;
+            state.currentMovieStatus = "idle";
+            state.currentMovieError = null;
+        },
     },
     extraReducers: (builder) => {
         builder
@@ -49,7 +70,6 @@ const moviesSlice = createSlice({
                 state.status = "error";
             })
 
-            // loadMovie
             .addCase(loadMovie.pending, (state) => {
                 state.currentMovieStatus = "loading";
                 state.currentMovie = null;
@@ -61,12 +81,17 @@ const moviesSlice = createSlice({
                 state.currentMovieError = null;
             })
             .addCase(loadMovie.rejected, (state, action) => {
-                state.currentMovieStatus = "error";
+                if (action.payload === "not_found") {
+                    state.currentMovieStatus = "not_found";
+                } else {
+                    state.currentMovieStatus = "error";
+                }
                 state.currentMovie = null;
                 state.currentMovieError = action.error.message;
             });
     },
 });
 
-export const { addBookingsToScreening } = moviesSlice.actions;
+export const { addBookingsToScreening, clearCurrentMovie } =
+    moviesSlice.actions;
 export default moviesSlice.reducer;
