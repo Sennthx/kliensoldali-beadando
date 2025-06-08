@@ -47,7 +47,7 @@ const TicketSelector = () => {
             const parsed = parseInt(value || "0", 10);
 
             const simulatedCounts = {
-                ...localCounts, // Fix here
+                ...localCounts,
                 [type]: parsed,
             };
 

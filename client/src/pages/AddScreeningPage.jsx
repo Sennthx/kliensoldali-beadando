@@ -54,14 +54,14 @@ const AddScreeningPage = () => {
             return;
         }
 
-        const targetIndex = days.indexOf(selectedDay); // 0-based
+        const targetIndex = days.indexOf(selectedDay);
         if (targetIndex === -1) {
             toast.error("Invalid day selected.");
             return;
         }
 
         const today = new Date();
-        const todayIndex = today.getDay() === 0 ? 6 : today.getDay() - 1; // 0 = Monday
+        const todayIndex = today.getDay() === 0 ? 6 : today.getDay() - 1;
         const diff = targetIndex - todayIndex;
         const screeningDate = new Date();
         screeningDate.setDate(today.getDate() + diff);

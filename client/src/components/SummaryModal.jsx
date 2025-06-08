@@ -60,7 +60,7 @@ const SummaryModal = ({ isOpen, onClose, onConfirm }) => {
                 screening_id: selectedScreeningId,
                 seats: selectedSeats.map((seat) => ({
                     row: seat.row,
-                    number: seat.seat, // matches controller's expected 'number' field
+                    number: seat.seat,
                 })),
                 ticket_types: Object.entries(ticketCounts)
                     .filter(([, count]) => count > 0)

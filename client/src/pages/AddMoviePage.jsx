@@ -50,7 +50,7 @@ const AddMoviePage = () => {
             }
 
             toast.success("Movie added successfully");
-            navigate("/"); // or wherever you want to redirect
+            navigate("/");
         } catch (error) {
             toast.error("Server error. Try again later: ", error);
         }

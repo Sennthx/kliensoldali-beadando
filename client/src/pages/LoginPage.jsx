@@ -30,7 +30,6 @@ const LoginPage = () => {
                 headers: {
                     "Content-Type": "application/json",
                     Accept: "application/json",
-                    // No Authorization header here on login typically
                 },
                 body: JSON.stringify(formData),
             });

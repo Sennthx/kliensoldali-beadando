@@ -35,8 +35,6 @@ const Header = () => {
         toast.info("Logged out successfully");
     };
 
-    // Close mobile menu on navigation or logout can be added if needed
-
     return (
         <>
             <header className="navbar bg-base-200 shadow-lg py-6 border-b-2 border-red-900">
@@ -50,7 +48,7 @@ const Header = () => {
                         </span>
                     </Link>
 
-                    {/* Hamburger icon - visible only on small screens */}
+                    {/* Hamburger icon -*/}
                     <button
                         className="lg:hidden btn btn-ghost"
                         onClick={() => setMobileMenuOpen((open) => !open)}

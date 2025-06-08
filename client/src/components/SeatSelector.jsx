@@ -124,10 +124,10 @@ const SeatSelector = () => {
                                   ? "bg-green-500 text-white"
                                   : "bg-gray-200"
                         }
-                        rounded-none text-accent text-lg font-semibold
-                        border-none
-                        w-[28px] h-[28px] sm:w-[40px] sm:h-[40px] lg:w-[32px] lg:h-[32px]
-                      `}
+                                    rounded-none text-accent text-lg font-semibold
+                                    border-none
+                                    w-[28px] h-[28px] sm:w-[40px] sm:h-[40px] lg:w-[32px] lg:h-[32px]
+                                `}
                                             disabled={!seat.available}
                                         >
                                             {rowIndexToLetter(seat.row - 1)}

@@ -40,10 +40,6 @@ const EditMoviePage = () => {
         }
     }, [user, currentMovie, movieStatus, navigate]);
 
-    const handleScreeningDeleteSuccess = () => {
-        //dispatch(loadMovie(parseInt(movieId)));
-    };
-
     if (movieStatus === "loading") return <div>Loading...</div>;
     if (!currentMovie) return null;
 
@@ -55,7 +51,6 @@ const EditMoviePage = () => {
                 <EditMovieScreenings
                     screenings={currentMovie.screenings}
                     token={token}
-                    onDeleteSuccess={handleScreeningDeleteSuccess}
                 />
             </div>
         </div>

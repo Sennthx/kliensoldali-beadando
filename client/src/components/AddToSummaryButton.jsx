@@ -12,7 +12,7 @@ const AddToSummaryButton = () => {
 
     const token = useSelector((state) => state.auth.token);
     const isLoggedIn = !!token;
-    
+
     const handleAddToSummary = () => {
         if (!isLoggedIn) {
             toast.info("Please log in to Show Summary");

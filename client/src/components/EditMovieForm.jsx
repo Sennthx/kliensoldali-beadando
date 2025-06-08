@@ -62,7 +62,7 @@ const EditMovieForm = ({ movie, token }) => {
                 body: JSON.stringify({
                     title: formData.title,
                     description: formData.description,
-                    image_path: formData.image, // must match API field name
+                    image_path: formData.image,
                     duration: Number(formData.duration),
                     genre: formData.genre,
                     release_year: Number(formData.release_year),
