@@ -4,6 +4,8 @@ import { useDispatch } from "react-redux";
 import { clearSelectedMovie } from "../store/uiSlice";
 import { toast } from "react-toastify";
 
+const API_BASE = import.meta.env.VITE_API_URL;
+
 const EditMovieForm = ({ movie, token }) => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -27,16 +29,13 @@ const EditMovieForm = ({ movie, token }) => {
             return;
 
         try {
-            const res = await fetch(
-                `http://localhost:8000/api/movies/${movie.id}`,
-                {
-                    method: "DELETE",
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                        Accept: "application/json",
-                    },
-                }
-            );
+            const res = await fetch(`${API_BASE}/movies/${movie.id}`, {
+                method: "DELETE",
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    Accept: "application/json",
+                },
+            });
 
             if (!res.ok) throw new Error("Failed to delete movie");
 
@@ -53,25 +52,22 @@ const EditMovieForm = ({ movie, token }) => {
         e.preventDefault();
 
         try {
-            const res = await fetch(
-                `http://localhost:8000/api/movies/${movie.id}`,
-                {
-                    method: "PUT",
-                    headers: {
-                        "Content-Type": "application/json",
-                        Authorization: `Bearer ${token}`,
-                        Accept: "application/json",
-                    },
-                    body: JSON.stringify({
-                        title: formData.title,
-                        description: formData.description,
-                        image_path: formData.image, // must match API field name
-                        duration: Number(formData.duration),
-                        genre: formData.genre,
-                        release_year: Number(formData.release_year),
-                    }),
-                }
-            );
+            const res = await fetch(`${API_BASE}/movies/${movie.id}`, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`,
+                    Accept: "application/json",
+                },
+                body: JSON.stringify({
+                    title: formData.title,
+                    description: formData.description,
+                    image_path: formData.image, // must match API field name
+                    duration: Number(formData.duration),
+                    genre: formData.genre,
+                    release_year: Number(formData.release_year),
+                }),
+            });
 
             if (!res.ok) {
                 const errorData = await res.json();

@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
+const API_BASE = import.meta.env.VITE_API_URL;
+
 const MyBookingsPage = () => {
     const user = useSelector((state) => state.auth.user);
     const token = useSelector((state) => state.auth.token);
@@ -24,7 +26,7 @@ const MyBookingsPage = () => {
 
         const fetchBookings = async () => {
             try {
-                const res = await fetch("http://localhost:8000/api/bookings", {
+                const res = await fetch(`${API_BASE}/bookings`, {
                     headers: {
                         Authorization: `Bearer ${token}`,
                         Accept: "application/json",

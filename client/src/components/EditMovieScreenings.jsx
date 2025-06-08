@@ -2,6 +2,8 @@ import { useState, useEffect, useRef } from "react";
 import { toast } from "react-toastify";
 import { X, Check } from "lucide-react";
 
+const API_BASE = import.meta.env.VITE_API_URL;
+
 const days = [
     "Monday",
     "Tuesday",
@@ -42,20 +44,17 @@ const EditMovieScreenings = ({ screenings, token, onDeleteSuccess }) => {
         if (!screening) return;
 
         try {
-            const res = await fetch(
-                `http://localhost:8000/api/screenings/${id}`,
-                {
-                    method: "PUT",
-                    headers: {
-                        "Content-Type": "application/json",
-                        Authorization: `Bearer ${token}`,
-                    },
-                    body: JSON.stringify({
-                        start_time: screening.start_time,
-                        week_day: screening.week_day,
-                    }),
-                }
-            );
+            const res = await fetch(`${API_BASE}/screenings/${id}`, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`,
+                },
+                body: JSON.stringify({
+                    start_time: screening.start_time,
+                    week_day: screening.week_day,
+                }),
+            });
 
             if (!res.ok) {
                 const error = await res.json();
@@ -70,15 +69,12 @@ const EditMovieScreenings = ({ screenings, token, onDeleteSuccess }) => {
 
     const handleScreeningDelete = async (id) => {
         try {
-            const res = await fetch(
-                `http://localhost:8000/api/screenings/${id}`,
-                {
-                    method: "DELETE",
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    },
-                }
-            );
+            const res = await fetch(`${API_BASE}/screenings/${id}`, {
+                method: "DELETE",
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
 
             if (!res.ok) {
                 throw new Error("Failed to delete screening");
