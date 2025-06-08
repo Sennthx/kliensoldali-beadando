@@ -10,10 +10,10 @@ const MovieCard = ({ id, title, image, duration, genre }) => {
         <div
             onClick={() => dispatch(setSelectedMovie(id))}
             className={`
-        card bg-base-100 shadow-md rounded-md overflow-hidden cursor-pointer transition 
-        hover:bg-base-100/60
-        ${isSelected ? "border-2 border-green-500" : "border border-transparent"}
-      `}
+                card bg-base-100 shadow-md rounded-md overflow-hidden cursor-pointer transition 
+                hover:bg-base-100/60
+                ${isSelected ? "border-2 border-green-500" : "border border-transparent"}
+            `}
         >
             <figure className="p-4">
                 <div className="relative w-full aspect-[10/14]">

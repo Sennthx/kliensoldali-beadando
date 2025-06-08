@@ -12,7 +12,7 @@ const AddToSummaryButton = () => {
 
     const user = useSelector((state) => state.auth.user);
     const isLoggedIn = !!user;
-    
+
     const handleAddToSummary = () => {
         if (!isLoggedIn) {
             toast.info("Please log in to Show Summary");
@@ -41,7 +41,7 @@ const AddToSummaryButton = () => {
                 className="btn btn-primary w-full text-xl py-6"
                 onClick={handleAddToSummary}
             >
-                { isLoggedIn ? "Show Summary" : "Log in to show summary" }
+                {isLoggedIn ? "Show Summary" : "Log in to show summary"}
             </button>
         </div>
     );

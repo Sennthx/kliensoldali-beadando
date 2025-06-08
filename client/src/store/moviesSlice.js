@@ -1,19 +1,19 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import moviesData from "../data/movies.json";
+// import moviesData from "../data/movies.json";
+
+const API_BASE = import.meta.env.VITE_API_URL;
 
 export const loadMovies = createAsyncThunk("movies/load", async () => {
-    return moviesData;
+    const response = await fetch(`${API_BASE}/movies`);
+    if (!response.ok) throw new Error("Failed to fetch movies");
+    return await response.json();
 });
 
-export const loadMovie = createAsyncThunk(
-    "movies/loadOne",
-    async (movieId) => {
-        // Simulate async fetch by filtering local JSON data
-        const movie = moviesData.find((m) => m.id === movieId);
-        if (!movie) throw new Error("Movie not found");
-        return movie;
-    }
-);
+export const loadMovie = createAsyncThunk("movies/loadOne", async (movieId) => {
+    const response = await fetch(`${API_BASE}/movies/${movieId}`);
+    if (!response.ok) throw new Error("Movie not found");
+    return await response.json();
+});
 
 const moviesSlice = createSlice({
     name: "movies",
@@ -48,7 +48,7 @@ const moviesSlice = createSlice({
             .addCase(loadMovies.rejected, (state) => {
                 state.status = "error";
             })
-        
+
             // loadMovie
             .addCase(loadMovie.pending, (state) => {
                 state.currentMovieStatus = "loading";

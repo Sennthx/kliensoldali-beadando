@@ -23,7 +23,7 @@ const MovieDetails = () => {
                         src={`/images/${movie.image}`}
                         alt={movie.title}
                         className="object-cover rounded-md shadow-lg 
-          sm:w-[200px] sm:h-[280px] md:w-5/6 md:h-5/6 lg:w-full lg:h-full"
+                            sm:w-[200px] sm:h-[280px] md:w-5/6 md:h-5/6 lg:w-full lg:h-full"
                     />
                 </div>
 

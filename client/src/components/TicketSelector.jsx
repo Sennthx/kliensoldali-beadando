@@ -37,7 +37,6 @@ const TicketSelector = () => {
     }, [ticketCounts]);
 
     const handleChange = (type, value) => {
-
         if (!isLoggedIn) {
             toast.info("Please log in to select tickets.");
             return;

@@ -39,16 +39,25 @@ const MyBookingsPage = () => {
                 </h2>
 
                 {bookings.length === 0 ? (
-                    <p className="text-center text-sm text-gray-500">You have no bookings.</p>
+                    <p className="text-center text-sm text-gray-500">
+                        You have no bookings.
+                    </p>
                 ) : (
                     <ul className="space-y-4">
                         {bookings.map((booking) => (
-                            <li key={booking.id} className="p-4 bg-base-100 border border-base-300 rounded-lg">
-                                <p className="font-semibold text-lg">{booking.movieTitle}</p>
+                            <li
+                                key={booking.id}
+                                className="p-4 bg-base-100 border border-base-300 rounded-lg"
+                            >
+                                <p className="font-semibold text-lg">
+                                    {booking.movieTitle}
+                                </p>
                                 <p className="text-sm">Date: {booking.date}</p>
                                 <p className="text-sm">Time: {booking.time}</p>
                                 <p className="text-sm">Room: {booking.room}</p>
-                                <p className="text-sm">Seats: {booking.seats.join(", ")}</p>
+                                <p className="text-sm">
+                                    Seats: {booking.seats.join(", ")}
+                                </p>
                             </li>
                         ))}
                     </ul>

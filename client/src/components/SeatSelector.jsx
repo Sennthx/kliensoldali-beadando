@@ -38,7 +38,7 @@ const SeatSelector = () => {
     useEffect(() => {
         dispatch(resetSelectedSeats());
     }, [selectedScreening, dispatch]);
-    
+
     if (!selectedScreening) return null;
 
     const generateSeatMatrix = () => {
