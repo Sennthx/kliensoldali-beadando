@@ -5,6 +5,16 @@ export const loadMovies = createAsyncThunk("movies/load", async () => {
     return moviesData;
 });
 
+export const loadMovie = createAsyncThunk(
+    "movies/loadOne",
+    async (movieId) => {
+        // Simulate async fetch by filtering local JSON data
+        const movie = moviesData.find((m) => m.id === movieId);
+        if (!movie) throw new Error("Movie not found");
+        return movie;
+    }
+);
+
 const moviesSlice = createSlice({
     name: "movies",
     initialState: {
@@ -14,7 +24,6 @@ const moviesSlice = createSlice({
     reducers: {
         addBookingsToScreening: (state, action) => {
             const { movieId, screeningId, newBookings } = action.payload;
-            console.log("asdasdsad");
             const movie = state.list.find((movie) => movie.id === movieId);
             if (movie) {
                 const screening = movie.screenings.find(
@@ -38,6 +47,23 @@ const moviesSlice = createSlice({
             })
             .addCase(loadMovies.rejected, (state) => {
                 state.status = "error";
+            })
+        
+            // loadMovie
+            .addCase(loadMovie.pending, (state) => {
+                state.currentMovieStatus = "loading";
+                state.currentMovie = null;
+                state.currentMovieError = null;
+            })
+            .addCase(loadMovie.fulfilled, (state, action) => {
+                state.currentMovieStatus = "loaded";
+                state.currentMovie = action.payload;
+                state.currentMovieError = null;
+            })
+            .addCase(loadMovie.rejected, (state, action) => {
+                state.currentMovieStatus = "error";
+                state.currentMovie = null;
+                state.currentMovieError = action.error.message;
             });
     },
 });

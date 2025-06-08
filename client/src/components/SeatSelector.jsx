@@ -17,6 +17,9 @@ const SeatSelector = () => {
     const movies = useSelector((state) => state.movies.list);
     const selectedMovie = movies.find((m) => m.id === selectedMovieId);
 
+    const user = useSelector((state) => state.auth.user);
+    const isLoggedIn = !!user;
+
     const selectedScreening = selectedMovie?.screenings.find(
         (s) => s.id === selectedScreeningId
     );
@@ -24,6 +27,18 @@ const SeatSelector = () => {
     const totalTickets =
         ticketCounts.adult + ticketCounts.student + ticketCounts.senior;
 
+    useEffect(() => {
+        if (selectedSeats.length > totalTickets) {
+            const excessSeats = selectedSeats.slice(totalTickets);
+            excessSeats.forEach((seat) => dispatch(removeSelectedSeat(seat)));
+            toast.info("Extra seats deselected due to reduced ticket count.");
+        }
+    }, [ticketCounts, selectedSeats, totalTickets, dispatch]);
+
+    useEffect(() => {
+        dispatch(resetSelectedSeats());
+    }, [selectedScreening, dispatch]);
+    
     if (!selectedScreening) return null;
 
     const generateSeatMatrix = () => {
@@ -48,6 +63,11 @@ const SeatSelector = () => {
     const seatMatrix = generateSeatMatrix();
 
     const handleSeatSelect = (seat) => {
+        if (!isLoggedIn) {
+            toast.info("Please log in to select seats.");
+            return;
+        }
+
         if (totalTickets === 0) {
             toast.error("Please select the number of tickets first.");
             return;
@@ -68,18 +88,6 @@ const SeatSelector = () => {
         const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
         return alphabet[index] || String.fromCharCode(65 + index);
     };
-
-    useEffect(() => {
-        if (selectedSeats.length > totalTickets) {
-            const excessSeats = selectedSeats.slice(totalTickets);
-            excessSeats.forEach((seat) => dispatch(removeSelectedSeat(seat)));
-            toast.info("Extra seats deselected due to reduced ticket count.");
-        }
-    }, [ticketCounts, selectedSeats, totalTickets, dispatch]);
-
-    useEffect(() => {
-        dispatch(resetSelectedSeats());
-    }, [selectedScreening, dispatch]);
 
     return (
         <>

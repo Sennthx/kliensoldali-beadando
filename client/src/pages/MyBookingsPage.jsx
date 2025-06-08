@@ -1,7 +1,17 @@
+import { useEffect } from "react";
 import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 const MyBookingsPage = () => {
-    // Dummy data for now
+    const user = useSelector((state) => state.auth.user);
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        if (!user) {
+            navigate("/login");
+        }
+    }, [user, navigate]);
+
     const bookings = [
         {
             id: 1,
@@ -20,8 +30,6 @@ const MyBookingsPage = () => {
             seats: ["B3", "B4", "B5"],
         },
     ];
-
-    const user = useSelector((state) => state.auth.user);
 
     return (
         <div className="flex items-start justify-center mt-8 bg-base-100 p-4">

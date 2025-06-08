@@ -50,25 +50,25 @@ const Header = () => {
 
                     {/* Desktop nav */}
                     <nav className="hidden lg:flex items-center gap-4">
-                        <Link to="/" className="btn btn-sm btn-ghost btn-primary">Movies</Link>
+                        <Link to="/" className="btn btn-sm btn-ghost btn-primary text-lg">Movies</Link>
 
                         {!isLoggedIn && (
                             <>
-                            <Link to="/login" className="btn btn-sm btn-ghost btn-primary">Login</Link>
-                            <Link to="/register" className="btn btn-sm btn-ghost btn-primary">Register</Link>
+                            <Link to="/login" className="btn btn-sm btn-ghost btn-primary text-lg">Login</Link>
+                            <Link to="/register" className="btn btn-sm btn-ghost btn-primary text-lg">Register</Link>
                             </>
                         )}
 
                         {isLoggedIn && (
                             <>
-                            <Link to="/my-bookings" className="btn btn-sm btn-ghost btn-primary">My Bookings</Link>
+                            <Link to="/my-bookings" className="btn btn-sm btn-ghost btn-primary text-lg">My Bookings</Link>
                             {role === "admin" && (
                                 <>
-                                <Link to="/add-movie" className="btn btn-sm btn-ghost btn-primary">Add Movie</Link>
-                                <Link to="/add-screening" className="btn btn-sm btn-ghost btn-primary">Add Screening</Link>
+                                <Link to="/add-movie" className="btn btn-sm btn-ghost btn-primary text-lg">Add Movie</Link>
+                                <Link to="/add-screening" className="btn btn-sm btn-ghost btn-primary text-lg">Add Screening</Link>
                                 </>
                             )}
-                            <button onClick={() => dispatch(logout())} className="btn btn-sm btn-error text-white hover:bg-error/80">
+                            <button onClick={() => dispatch(logout())} className="btn btn-sm btn-error text-white text-lg hover:bg-error/80">
                                 Logout
                             </button>
                             </>

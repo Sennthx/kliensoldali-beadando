@@ -1,13 +1,15 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Header from "./components/layout/Header";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 import BookingPage from "./pages/BookingPage";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import MyBookingsPage from "./pages/MyBookingsPage";
 import AddMoviePage from "./pages/AddMoviePage";
 import AddScreeningPage from "./pages/AddScreeningPage";
-import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import EditMoviePage from "./pages/EditMoviePage";
 
 function App() {
     return (
@@ -21,6 +23,7 @@ function App() {
                     <Route path="/my-bookings" element={<MyBookingsPage />} />
                     <Route path="/add-movie" element={<AddMoviePage />} />
                     <Route path="/add-screening" element={<AddScreeningPage />} />
+                    <Route path="/edit-movie/:movieId" element={<EditMoviePage />} />
                 </Routes>
             </main>
             <ToastContainer position="top-right" autoClose={3000} />

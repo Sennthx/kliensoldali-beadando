@@ -1,4 +1,18 @@
+import { useEffect } from "react";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+
 const AddMoviePage = () => {
+
+    const user = useSelector((state) => state.auth.user);
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        if (!user || user.role !== "admin") {
+            navigate("/");
+        }
+    }, [user, navigate]);
+
     return (
         <div className="flex items-start justify-center mt-8 bg-base-100 p-4">
             <div className="w-full max-w-md p-8 space-y-6 bg-base-200 rounded-lg shadow-lg border border-secondary">

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setTicketCount } from "../store/uiSlice";
+import { toast } from "react-toastify";
 
 const TicketSelector = () => {
     const dispatch = useDispatch();
@@ -26,6 +27,9 @@ const TicketSelector = () => {
         0
     );
 
+    const user = useSelector((state) => state.auth.user);
+    const isLoggedIn = !!user;
+
     const [localCounts, setLocalCounts] = useState(ticketCounts);
 
     useEffect(() => {
@@ -33,6 +37,12 @@ const TicketSelector = () => {
     }, [ticketCounts]);
 
     const handleChange = (type, value) => {
+
+        if (!isLoggedIn) {
+            toast.info("Please log in to select tickets.");
+            return;
+        }
+
         if (/^\d*$/.test(value)) {
             const parsed = parseInt(value || "0", 10);
             const newTotal = totalSelected - ticketCounts[type] + parsed;
@@ -42,6 +52,10 @@ const TicketSelector = () => {
                 dispatch(setTicketCount({ type, count: parsed }));
             }
         }
+    };
+
+    const handleFocus = () => {
+        if (!isLoggedIn) toast.info("Please log in to select tickets.");
     };
 
     if (!screeningData) {
@@ -90,9 +104,11 @@ const TicketSelector = () => {
                                     inputMode="numeric"
                                     pattern="[0-9]*"
                                     value={localCounts[key]}
+                                    onFocus={handleFocus}
                                     onChange={(e) =>
                                         handleChange(key, e.target.value)
                                     }
+                                    readOnly={!isLoggedIn}
                                     className="input input-bordered w-16"
                                 />
                             </div>

@@ -5,13 +5,25 @@ import SelectedMovie from "../components/SelectedMovie";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { loadMovies } from "../store/moviesSlice";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 const BookingPage = () => {
     const dispatch = useDispatch();
+    const navigate = useNavigate();
+
+    const user = useSelector((state) => state.auth.user);
+    const selectedMovieId = useSelector((state) => state.ui.selectedMovieId);
 
     useEffect(() => {
         dispatch(loadMovies());
     }, [dispatch]);
+
+    const handleEditClick = () => {
+        if (selectedMovieId) {
+            navigate(`/edit-movie/${selectedMovieId}`);
+        }
+    };
 
     return (
         <div className="w-full min-h-screen bg-base-100">
@@ -29,6 +41,14 @@ const BookingPage = () => {
                     <div className="border-2 border-secondary sticky top-8 self-start bg-base-200 rounded-box p-0">
                         <div className="p-6 overflow-y-auto max-h-[calc(100vh-4rem)]">
                             <SelectedMovie />
+                            {user?.role === "admin" && selectedMovieId && (
+                                <button
+                                    className="btn btn-warning w-full"
+                                    onClick={handleEditClick}
+                                >
+                                    Edit Selected Movie
+                                </button>
+                            )}
                         </div>
                     </div>
                 </section>
