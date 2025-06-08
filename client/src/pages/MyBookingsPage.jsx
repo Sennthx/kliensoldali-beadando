@@ -68,9 +68,7 @@ const MyBookingsPage = () => {
                     <p className="text-center text-sm text-gray-500">
                         Loading...
                     </p>
-                ) : error ? (
-                    <p className="text-center text-red-500 text-sm">{error}</p>
-                ) : renderedBookings.length === 0 ? (
+                ) : renderedBookings.length === 0 || error ? (
                     <p className="text-center text-sm text-gray-500">
                         You have no bookings.
                     </p>
