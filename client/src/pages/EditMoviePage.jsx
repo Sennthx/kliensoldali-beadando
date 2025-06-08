@@ -50,14 +50,6 @@ const EditMoviePage = () => {
     return (
         <div className="flex justify-center mt-8 p-4 bg-base-100">
             <div className="relative w-full max-w-2xl bg-base-200 p-8 rounded-lg shadow border border-secondary space-y-12">
-                <button
-                    type="button"
-                    onClick={() => navigate("/add-screening")}
-                    className="absolute top-8 left-8 btn btn-primary btn-sm"
-                >
-                    Add Screening
-                </button>
-
                 <EditMovieForm movie={currentMovie} token={token} />
 
                 <EditMovieScreenings
